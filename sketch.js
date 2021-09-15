@@ -46,13 +46,6 @@ function setup() {
   Matter.Composite.add(bridge.body, jointPoint);
   jointLink = new Link(bridge, jointPoint);
 
-  for (var i = 0; i <= 8; i++) {
-    var x = random(width / 2 - 200, width / 2 + 300);
-    var y = random(-100, 100);
-    var stone = new Stone(x, y, 80, 80);
-    stones.push(stone);
-  }
-
   zombie = createSprite(width / 2, height - 100, 50, 50);
   zombie.addAnimation("lefttoright", zombie1, zombie2, zombie1);
   zombie.addAnimation("righttoleft", zombie3, zombie4, zombie3);
@@ -60,11 +53,6 @@ function setup() {
 
   zombie.scale = 0.1;
   zombie.velocityX = 10;
-
-  breakButton = createButton("");
-  breakButton.position(width - 200, height / 2 - 50);
-  breakButton.class("breakbutton");
-  breakButton.mousePressed(handleButtonPress);
 }
 
 function draw() {
@@ -72,29 +60,6 @@ function draw() {
   Engine.update(engine);
 
   bridge.show();
-
-  for (var stone of stones) {
-    stone.show();
-    var pos = stone.body.position;
-    var distance = dist(zombie.position.x, zombie.position.y, pos.x, pos.y);
-    if (distance <= 50) {
-      zombie.velocityX = 0;
-      Matter.Body.setVelocity(stone.body, { x: 10, y: -10 });
-      zombie.changeImage("sad");
-      collided = true;
-    }
-  }
-
-  if (zombie.position.x >= width - 300 && !collided) {
-    zombie.velocityX = -10;
-    zombie.changeAnimation("righttoleft");
-  }
-
-  if (zombie.position.x <= 300 && !collided) {
-    zombie.velocityX = 10;
-    zombie.changeAnimation("lefttoright");
-  }
-
   drawSprites();
 }
 
